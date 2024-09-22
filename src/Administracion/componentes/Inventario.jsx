@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import ModalForm from "./modalForm"; // Asegúrate de que este componente exista
-
+import { Toaster,toast } from "sonner";
 const Inventario = () => {
   const [inventarioItems, setInventarioItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +27,9 @@ const Inventario = () => {
     try {
       await axios.delete(`http://localhost:5000/api/items/${id}`);
       setInventarioItems(inventarioItems.filter((item) => item._id !== id));
+      toast.success("Producto eliminado")
     } catch (error) {
+      toast.error("Error al eliminar el producto")
       console.error("Error deleting item:", error);
     }
   };
@@ -46,9 +48,11 @@ const Inventario = () => {
     if (currentItem) {
       // Si hay un ítem actual, se está editando
       await axios.put(`http://localhost:5000/api/items/${currentItem._id}`, formData);
+      toast.success("Producto actualizado")
     } else {
       // Si no hay ítem actual, se está agregando
       await axios.post("http://localhost:5000/api/items", formData);
+      toast.success("Producto agregado")
     }
     fetchInventario(); // Actualizar la lista de inventario
     setShowModal(false); // Cerrar el modal
@@ -63,7 +67,9 @@ const Inventario = () => {
   );
 
   return (
+  
     <div className="bg-white p-6 rounded-lg shadow-lg">
+        <Toaster position="top-center" richColors ></Toaster>
       <h2 className="text-2xl font-semibold mb-4">Control de Inventario</h2>
       <div className="flex justify-between items-center mb-4">
         <div className="relative">
@@ -98,18 +104,22 @@ const Inventario = () => {
               <td className="p-2">{item.name}</td>
               <td className="p-2">{item.cantidad}</td>
               <td className="p-2">
-                <span
+            {/*     <span
                   className={`px-2 py-1 rounded-full text-xs ${
-                    item.status === "En Stock"
+                    item.cantidad >100
                       ? "bg-green-200 text-green-800"
-                      : item.status === "Poco Stock"
+                      : item.cantidad < 50
                       ? "bg-yellow-200 text-yellow-800"
                       : "bg-red-200 text-red-800"
                   }`}
                 >
                   {item.status}
-                </span>
-              </td>
+                </span> */}
+
+            {item.cantidad>100?(<><span className="px-2 py-1 rounded-full text-xs bg-green-200 text-grenn-800">Hay stock</span></>):(<></>)}
+            {item.cantidad<100 && item.cantidad!=0?(<><span className="px-2 py-1 rounded-full text-xs bg-yellow-200 text-yellow-800">Poco Stock</span></>):(<></>)}
+            {item.cantidad===0?(<><span className="px-2 py-1 rounded-full text-xs bg-red-200 text-red-800"> No hay Stock</span></>):(<></>)}
+              </td>  
               <td className="p-2">
                 <button
                   className="text-blue-500 mr-2"
