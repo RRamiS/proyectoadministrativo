@@ -1,68 +1,84 @@
 import React, { useState } from "react";
-import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes, FaPlus, FaSearch, FaEdit, FaTrash } from "react-icons/fa";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes } from "react-icons/fa";
 import Analytics from "./Analytics";
 import IngresoData from "./IngresoData";
 import Egresos from "./Egresos";
 import Inventario from "./Inventario";
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("analytics");
-
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const renderActiveTab = () => {
     switch (activeTab) {
       case "analytics":
-        return (
-          <Analytics/>
-        );
+        return <Analytics />;
       case "ingresos":
-        return (
-        <IngresoData/>
-        );
+        return <IngresoData />;
       case "egresos":
-        return (
-         <Egresos/>
-        );
+        return <Egresos />;
       case "inventario":
-        return (
-       <Inventario/>
-        );
+        return <Inventario />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold mb-8">Panel de Administracion</h1>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div className="flex min-h-screen">
+      {/* Tab Bar Lateral */}
+      <div className="w-64 bg-gray-800 text-white flex flex-col p-4 space-y-4">
+        <h1 className="text-2xl font-bold mb-8">Panel de Admin</h1>
         <button
-          className={`p-4 rounded-lg shadow-md flex items-center justify-center ${activeTab === "analytics" ? "bg-blue-500 text-white" : "bg-white"}`}
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "analytics"
+              ? "bg-gradient-to-r from-blue-500 to-purple-500 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
           onClick={() => setActiveTab("analytics")}
         >
-          <FaChartBar className="mr-2" /> Analytics
+          <FaChartBar className="transition-transform duration-300" />
+          <span>Analytics</span>
         </button>
         <button
-          className={`p-4 rounded-lg shadow-md flex items-center justify-center ${activeTab === "ingresos" ? "bg-blue-500 text-white" : "bg-white"}`}
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "ingresos"
+              ? "bg-gradient-to-r from-green-500 to-teal-500 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
           onClick={() => setActiveTab("ingresos")}
         >
-          <FaMoneyBillWave className="mr-2" /> Ingresos
+          <FaMoneyBillWave className="transition-transform duration-300" />
+          <span>Ingresos</span>
         </button>
         <button
-          className={`p-4 rounded-lg shadow-md flex items-center justify-center ${activeTab === "egresos" ? "bg-blue-500 text-white" : "bg-white"}`}
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "egresos"
+              ? "bg-gradient-to-r from-yellow-500 to-orange-500 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
           onClick={() => setActiveTab("egresos")}
         >
-          <FaReceipt className="mr-2" /> Egresos
+          <FaReceipt className="transition-transform duration-300" />
+          <span>Egresos</span>
         </button>
         <button
-          className={`p-4 rounded-lg shadow-md flex items-center justify-center ${activeTab === "inventario" ? "bg-blue-500 text-white" : "bg-white"}`}
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "inventario"
+              ? "bg-gradient-to-r from-red-500 to-pink-500 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
           onClick={() => setActiveTab("inventario")}
         >
-          <FaBoxes className="mr-2" /> Inventario
+          <FaBoxes className="transition-transform duration-300" />
+          <span>Inventario</span>
         </button>
       </div>
-      {renderActiveTab()}
+
+      {/* Contenido Principal */}
+      <div className="flex-1 p-8 bg-gray-100">
+        <h1 className="text-4xl font-bold mb-8">Panel de Administración</h1>
+        {renderActiveTab()}
+      </div>
     </div>
   );
 };
