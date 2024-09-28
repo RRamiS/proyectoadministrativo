@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes } from "react-icons/fa";
+import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes, FaClock } from "react-icons/fa";
 import Analytics from "./Analytics";
 import IngresoData from "./IngresoData";
 import Egresos from "./Egresos";
 import Inventario from "./Inventario";
+import PagosProyectados from "./pagosProyectados"; 
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("analytics");
@@ -18,6 +19,8 @@ const AdminDashboard = () => {
         return <Egresos />;
       case "inventario":
         return <Inventario />;
+      case "pagos":
+        return <PagosProyectados />; 
       default:
         return null;
     }
@@ -71,6 +74,17 @@ const AdminDashboard = () => {
         >
           <FaBoxes className="transition-transform duration-300" />
           <span>Inventario</span>
+        </button>
+        <button
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "pagos"
+              ? "bg-gradient-to-r from-indigo-500 to-purple-500 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
+          onClick={() => setActiveTab("pagos")}
+        >
+          <FaClock className="transition-transform duration-300" />
+          <span>Pagos Proyectados</span>
         </button>
       </div>
 
