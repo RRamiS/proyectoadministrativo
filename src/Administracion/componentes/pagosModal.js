@@ -96,6 +96,7 @@ const PagosModal = ({ showModal, handleClose, handleSubmit, pago }) => {
             >
               <option value="Pendiente">Pendiente</option>
               <option value="Atrasado">Atrasado</option>
+              <option value="Pagado">Pagado</option>
             </select>
           </div>
           <button

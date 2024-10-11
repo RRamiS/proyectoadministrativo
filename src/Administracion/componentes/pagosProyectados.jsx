@@ -71,10 +71,14 @@ const PagosProyectados = () => {
       </div>
       <ul>
         {pagos.map((pago) => (
-          <li key={pago._id} className="flex justify-between items-center mb-4">
+          <li key={pago._id} className="flex justify-between items-center mb-4 bg-gray-100 p-4 rounded-lg shadow-md">
             <div>
               <p className="font-semibold">{pago.descripcion}</p>
-              <p className="text-gray-600">{pago.fecha}</p>
+              <p className="text-gray-600">Fecha: {new Date(pago.fecha).toLocaleDateString()}</p>
+              <p className="text-gray-600">Monto: ${pago.monto.toFixed(2)}</p> {/* Mostrar el monto */}
+              <p className={`text-sm font-semibold ${pago.estado === "Pagado" ? "text-green-500" : "text-red-500"}`}>
+                Estado: {pago.estado}
+              </p> {/* Mostrar el estado con estilos */}
             </div>
             <div className="flex space-x-2">
               <button
