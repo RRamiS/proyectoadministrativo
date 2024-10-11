@@ -15,7 +15,7 @@ const IngresoData = () => {
   // Función para obtener los ingresos desde la API
   const fetchIngresos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/ingresos");
+      const response = await axios.get("https://admapi-production.up.railway.app/api/ingresos");
       setIngresosData(response.data);
       // Calculo total ingresos
       const total = response.data.reduce((acc, ingreso) => acc + ingreso.valor, 0);
