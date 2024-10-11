@@ -10,7 +10,7 @@ const FolderManager = () => {
   useEffect(() => {
     // Obtener carpetas desde la API
     const fetchFolders = async () => {
-      const response = await fetch("http://localhost:5000/api/folders");
+      const response = await fetch("https://admapi-production.up.railway.app/api/folders");
       const data = await response.json();
       setFolders(data);
     };
@@ -19,7 +19,7 @@ const FolderManager = () => {
 
   const addFolder = async () => {
     if (folderName.trim() !== "") {
-      const response = await fetch("http://localhost:5000/api/folders", {
+      const response = await fetch("https://admapi-production.up.railway.app/api/folders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: folderName }),
@@ -31,7 +31,7 @@ const FolderManager = () => {
   };
 
   const deleteFolder = async (id) => {
-    await fetch(`http://localhost:5000/api/folders/${id}`, { method: "DELETE" });
+    await fetch(`https://admapi-production.up.railway.app/api/folders/${id}`, { method: "DELETE" });
     setFolders(folders.filter((folder) => folder._id !== id));
   };
 

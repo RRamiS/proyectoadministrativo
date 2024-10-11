@@ -14,7 +14,7 @@ function Egresos() {
   // Obtener los egresos desde la API
   useEffect(() => {
     const fetchEgresos = async () => {
-      const response = await fetch("http://localhost:5000/api/egresos");
+      const response = await fetch("https://admapi-production.up.railway.app/api/egresos");
       const data = await response.json();
       setEgresosData(data);
       setTotalEgresos(data.reduce((acc, egreso) => acc + egreso.value, 0)); // Calcular el total
@@ -34,7 +34,7 @@ function Egresos() {
   };
 
   const handleDeleteEgreso = async (id) => {
-    await fetch(`http://localhost:5000/api/egresos/${id}`, { method: "DELETE" });
+    await fetch(`https://admapi-production.up.railway.app/api/egresos/${id}`, { method: "DELETE" });
     setEgresosData(egresosData.filter((egreso) => egreso._id !== id));
     const deletedEgreso = egresosData.find((egreso) => egreso._id === id);
     setTotalEgresos(totalEgresos - deletedEgreso.value); // Actualizar el total
@@ -43,7 +43,7 @@ function Egresos() {
   const handleSubmitEgreso = async (egresoData) => {
     if (selectedEgreso) {
       // Editar egreso existente
-      const response = await fetch(`http://localhost:5000/api/egresos/${selectedEgreso._id}`, {
+      const response = await fetch(`https://admapi-production.up.railway.app/api/egresos/${selectedEgreso._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(egresoData),
@@ -54,7 +54,7 @@ function Egresos() {
       );
     } else {
       // Crear nuevo egreso
-      const response = await fetch("http://localhost:5000/api/egresos", {
+      const response = await fetch("https://admapi-production.up.railway.app/api/egresos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(egresoData),

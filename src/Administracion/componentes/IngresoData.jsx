@@ -44,7 +44,7 @@ const IngresoData = () => {
   // Función para eliminar un ingreso
   const handleDeleteIngreso = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/ingresos/${id}`);
+      await axios.delete(`https://admapi-production.up.railway.app/api/ingresos/${id}`);
       setIngresosData(ingresosData.filter((ingreso) => ingreso._id !== id));
     } catch (error) {
       console.error("Error deleting ingreso:", error);
@@ -56,7 +56,7 @@ const IngresoData = () => {
     try {
       if (selectedIngreso) {
         // Editando form
-        await axios.put(`http://localhost:5000/api/ingresos/${selectedIngreso._id}`, formData);
+        await axios.put(`https://admapi-production.up.railway.app/api/ingresos/${selectedIngreso._id}`, formData);
         setIngresosData(
           ingresosData.map((ingreso) =>
             ingreso._id === selectedIngreso._id ? { ...ingreso, ...formData } : ingreso
@@ -64,7 +64,7 @@ const IngresoData = () => {
         );
       } else {
         // Agregando un form
-        const response = await axios.post("http://localhost:5000/api/ingresos", formData);
+        const response = await axios.post("https://admapi-production.up.railway.app/api/ingresos", formData);
         setIngresosData([...ingresosData, response.data]);
       }
       setShowModal(false); 

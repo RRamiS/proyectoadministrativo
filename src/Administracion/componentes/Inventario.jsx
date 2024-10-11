@@ -12,7 +12,7 @@ const Inventario = () => {
   // Función para obtener los items del inventario desde la API
   const fetchInventario = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/items");
+      const response = await axios.get("https://admapi-production.up.railway.app/api/items");
       setInventarioItems(response.data); // Asegúrate de que la respuesta contenga los datos correctos
     } catch (error) {
       console.error("Error fetching inventory:", error);
@@ -25,7 +25,7 @@ const Inventario = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/items/${id}`);
+      await axios.delete(`https://admapi-production.up.railway.app/api/items/${id}`);
       setInventarioItems(inventarioItems.filter((item) => item._id !== id));
       toast.success("Producto eliminado")
     } catch (error) {
@@ -47,11 +47,11 @@ const Inventario = () => {
   const handleSubmit = async (formData) => {
     if (currentItem) {
       // Si hay un ítem actual, se está editando
-      await axios.put(`http://localhost:5000/api/items/${currentItem._id}`, formData);
+      await axios.put(`https://admapi-production.up.railway.app/api/items/${currentItem._id}`, formData);
       toast.success("Producto actualizado")
     } else {
       // Si no hay ítem actual, se está agregando
-      await axios.post("http://localhost:5000/api/items", formData);
+      await axios.post("https://admapi-production.up.railway.app/api/items", formData);
       toast.success("Producto agregado")
     }
     fetchInventario(); // Actualizar la lista de inventario

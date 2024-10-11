@@ -10,7 +10,7 @@ const PagosProyectados = () => {
   useEffect(() => {
     // Llamada a la API para obtener los pagos proyectados
     const fetchPagos = async () => {
-      const response = await fetch("http://localhost:5000/api/pagos");
+      const response = await fetch("https://admapi-production.up.railway.app/api/pagos");
       const data = await response.json();
       setPagos(data);
     };
@@ -29,14 +29,14 @@ const PagosProyectados = () => {
   };
 
   const handleDeletePago = async (id) => {
-    await fetch(`http://localhost:5000/api/pagos/${id}`, { method: "DELETE" });
+    await fetch(`https://admapi-production.up.railway.app/api/pagos/${id}`, { method: "DELETE" });
     setPagos(pagos.filter((pago) => pago._id !== id));
   };
 
   const handleSubmitPago = async (pagoData) => {
     if (currentPago) {
       // Actualizar pago existente
-      const response = await fetch(`http://localhost:5000/api/pagos/${currentPago._id}`, {
+      const response = await fetch(`https://admapi-production.up.railway.app/api/pagos/${currentPago._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pagoData),
@@ -45,7 +45,7 @@ const PagosProyectados = () => {
       setPagos(pagos.map((pago) => (pago._id === updatedPago._id ? updatedPago : pago)));
     } else {
       // Crear nuevo pago
-      const response = await fetch("http://localhost:5000/api/pagos", {
+      const response = await fetch("https://admapi-production.up.railway.app/api/pagos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(pagoData),
