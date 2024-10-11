@@ -72,42 +72,44 @@ const FolderTable = () => {
 
       {/* Formulario para agregar nuevas entradas */}
       <h3 className="text-lg font-semibold mt-6">Agregar Nueva Entrada</h3>
-      <div className="flex mb-4">
+      <div className="flex flex-col sm:flex-row mb-4 space-y-2 sm:space-y-0">
         <input type="text" placeholder="Producto" value={newEntry.producto} onChange={(e) => setNewEntry({ ...newEntry, producto: e.target.value })} className="p-2 border border-gray-300 rounded-lg flex-grow" />
-        <input type="date" value={newEntry.fecha} onChange={(e) => setNewEntry({ ...newEntry, fecha: e.target.value })} className="p-2 border border-gray-300 rounded-lg ml-2" />
-        <input type="number" placeholder="Monto" value={newEntry.monto} onChange={(e) => setNewEntry({ ...newEntry, monto: e.target.value })} className="p-2 border border-gray-300 rounded-lg ml-2" />
-        <input type="text" placeholder="De" value={newEntry.personaDe} onChange={(e) => setNewEntry({ ...newEntry, personaDe: e.target.value })} className="p-2 border border-gray-300 rounded-lg ml-2" />
-        <input type="text" placeholder="Para" value={newEntry.personaPara} onChange={(e) => setNewEntry({ ...newEntry, personaPara: e.target.value })} className="p-2 border border-gray-300 rounded-lg ml-2" />
-        <button onClick={addEntry} className="bg-blue-500 text-white p-2 ml-2 rounded-lg">Agregar</button>
+        <input type="date" value={newEntry.fecha} onChange={(e) => setNewEntry({ ...newEntry, fecha: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
+        <input type="number" placeholder="Monto" value={newEntry.monto} onChange={(e) => setNewEntry({ ...newEntry, monto: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
+        <input type="text" placeholder="De" value={newEntry.personaDe} onChange={(e) => setNewEntry({ ...newEntry, personaDe: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
+        <input type="text" placeholder="Para" value={newEntry.personaPara} onChange={(e) => setNewEntry({ ...newEntry, personaPara: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
+        <button onClick={addEntry} className="bg-blue-500 text-white p-2 rounded-lg">Agregar</button>
       </div>
 
       {/* Tabla de entradas */}
-      <table className="table-auto w-full mt-4 border border-gray-300">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="p-2 border">Producto</th>
-            <th className="p-2 border">Fecha</th>
-            <th className="p-2 border">Monto</th>
-            <th className="p-2 border">De</th>
-            <th className="p-2 border">Para</th>
-            <th className="p-2 border">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {folder.entries.map((entry) => (
-            <tr key={entry._id}>
-              <td className="p-2 border">{entry.producto}</td>
-              <td className="p-2 border">{new Date(entry.fecha).toLocaleDateString() || 'Sin Fecha'}</td>
-              <td className="p-2 border">${entry.monto ? parseFloat(entry.monto).toFixed(2) : '0.00'}</td>
-              <td className="p-2 border">{entry.personaDe}</td>
-              <td className="p-2 border">{entry.personaPara}</td>
-              <td className="p-2 border">
-                <button onClick={() => deleteEntry(entry._id)} className="text-red-500">Eliminar</button>
-              </td>
+      <div className="overflow-x-auto"> {/* Permitir desplazamiento horizontal en pantallas pequeñas */}
+        <table className="table-auto w-full mt-4 border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-2 border">Producto</th>
+              <th className="p-2 border">Fecha</th>
+              <th className="p-2 border">Monto</th>
+              <th className="p-2 border">De</th>
+              <th className="p-2 border">Para</th>
+              <th className="p-2 border">Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {folder.entries.map((entry) => (
+              <tr key={entry._id}>
+                <td className="p-2 border">{entry.producto}</td>
+                <td className="p-2 border">{new Date(entry.fecha).toLocaleDateString() || 'Sin Fecha'}</td>
+                <td className="p-2 border">${entry.monto ? parseFloat(entry.monto).toFixed(2) : '0.00'}</td>
+                <td className="p-2 border">{entry.personaDe}</td>
+                <td className="p-2 border">{entry.personaPara}</td>
+                <td className="p-2 border">
+                  <button onClick={() => deleteEntry(entry._id)} className="text-red-500">Eliminar</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
