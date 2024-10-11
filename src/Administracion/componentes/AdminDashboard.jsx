@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes, FaClock } from "react-icons/fa";
+import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes, FaClock, FaFolder } from "react-icons/fa";
 import Analytics from "./Analytics";
 import IngresoData from "./IngresoData";
 import Egresos from "./Egresos";
 import Inventario from "./Inventario";
-import PagosProyectados from "./pagosProyectados"; 
+import PagosProyectados from "./pagosProyectados";
+import FolderManager from "./FolderManager"; // Importar FolderManager
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("analytics");
@@ -20,7 +21,9 @@ const AdminDashboard = () => {
       case "inventario":
         return <Inventario />;
       case "pagos":
-        return <PagosProyectados />; 
+        return <PagosProyectados />;
+      case "carpetas":  // Caso para FolderManager
+        return <FolderManager />;
       default:
         return null;
     }
@@ -85,6 +88,17 @@ const AdminDashboard = () => {
         >
           <FaClock className="transition-transform duration-300" />
           <span>Pagos Proyectados</span>
+        </button>
+        <button
+          className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
+            activeTab === "carpetas"
+              ? "bg-gradient-to-r from-gray-500 to-gray-900 scale-105 shadow-lg"
+              : "bg-gray-800 hover:bg-gray-700 hover:scale-105"
+          }`}
+          onClick={() => setActiveTab("carpetas")}
+        >
+          <FaFolder className="transition-transform duration-300" />
+          <span>Carpetas</span>
         </button>
       </div>
 
