@@ -16,7 +16,7 @@ const FolderTable = () => {
 
   useEffect(() => {
     const fetchFolder = async () => {
-      const response = await fetch(`http://localhost:5000/api/folders/${id}`);
+      const response = await fetch(`https://adm-api.vercel.app/api/folders/${id}`);
       const data = await response.json();
       setFolder(data);
     };
@@ -25,7 +25,7 @@ const FolderTable = () => {
   }, [id]);
 
   const addEntry = async () => {
-    const response = await fetch(`http://localhost:5000/api/folders/${id}/entries`, {
+    const response = await fetch(`https://adm-api.vercel.app/api/folders/${id}/entries`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEntry),
@@ -41,7 +41,7 @@ const FolderTable = () => {
   };
 
   const deleteEntry = async (entryId) => {
-    await fetch(`http://localhost:5000/api/folders/${id}/entries/${entryId}`, { method: "DELETE" });
+    await fetch(`https://adm-api.vercel.app/api/folders/${id}/entries/${entryId}`, { method: "DELETE" });
     setFolder((prevFolder) => ({
       ...prevFolder,
       entries: prevFolder.entries.filter(entry => entry._id !== entryId),
