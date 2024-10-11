@@ -8,6 +8,7 @@ const FolderTable = () => {
     producto: "",
     fecha: "",
     monto: "",
+    cantidad: "",
     personaDe: "",
     personaPara: ""
   });
@@ -34,7 +35,7 @@ const FolderTable = () => {
     if (response.ok) {
       const addedEntry = await response.json();
       setFolder((prevFolder) => ({ ...prevFolder, entries: [...prevFolder.entries, addedEntry] }));
-      setNewEntry({ producto: "", fecha: "", monto: "", personaDe: "", personaPara: "" }); // Limpiar el formulario
+      setNewEntry({ producto: "", fecha: "", monto: "", cantidad: "", personaDe: "", personaPara: "" }); // Limpiar el formulario
     } else {
       console.error("Error al agregar la entrada");
     }
@@ -50,7 +51,7 @@ const FolderTable = () => {
 
   // Calcular el monto total
   const totalAmount = folder ? folder.entries.reduce((total, entry) => total + parseFloat(entry.monto || 0), 0) : 0;
-
+  const totalCant = folder ? folder.entries.reduce((total, entry) => total + parseFloat(entry.cantidad || 0), 0) : 0;
   if (!folder) {
     return <div>Cargando...</div>;
   }
@@ -61,7 +62,7 @@ const FolderTable = () => {
       
       {/* Monto Total */}
       <h3 className="text-lg font-semibold">Monto Total: ${totalAmount.toFixed(2)}</h3>
-
+      <h3 className="text-lg font-semibold">Cantidad Total: ${totalCant.toFixed(2)}</h3>
       {/* Botón para volver atrás */}
       <button
         onClick={() => navigate(-1)} // Volver a la página anterior
@@ -76,6 +77,7 @@ const FolderTable = () => {
         <input type="text" placeholder="Producto" value={newEntry.producto} onChange={(e) => setNewEntry({ ...newEntry, producto: e.target.value })} className="p-2 border border-gray-300 rounded-lg flex-grow" />
         <input type="date" value={newEntry.fecha} onChange={(e) => setNewEntry({ ...newEntry, fecha: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
         <input type="number" placeholder="Monto" value={newEntry.monto} onChange={(e) => setNewEntry({ ...newEntry, monto: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
+        <input type="number" placeholder="Cantidad" value={newEntry.cantidad} onChange={(e) => setNewEntry({ ...newEntry, cantidad: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
         <input type="text" placeholder="De" value={newEntry.personaDe} onChange={(e) => setNewEntry({ ...newEntry, personaDe: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
         <input type="text" placeholder="Para" value={newEntry.personaPara} onChange={(e) => setNewEntry({ ...newEntry, personaPara: e.target.value })} className="p-2 border border-gray-300 rounded-lg" />
         <button onClick={addEntry} className="bg-blue-500 text-white p-2 rounded-lg">Agregar</button>
@@ -89,6 +91,7 @@ const FolderTable = () => {
               <th className="p-2 border">Producto</th>
               <th className="p-2 border">Fecha</th>
               <th className="p-2 border">Monto</th>
+              <th className="p-2 border">Cantidad</th>
               <th className="p-2 border">De</th>
               <th className="p-2 border">Para</th>
               <th className="p-2 border">Acciones</th>
@@ -100,6 +103,7 @@ const FolderTable = () => {
                 <td className="p-2 border">{entry.producto}</td>
                 <td className="p-2 border">{new Date(entry.fecha).toLocaleDateString() || 'Sin Fecha'}</td>
                 <td className="p-2 border">${entry.monto ? parseFloat(entry.monto).toFixed(2) : '0.00'}</td>
+                <td className="p-2 border">${entry.cantidad ? parseFloat(entry.cantidad).toFixed(2) : '0.00'}</td>
                 <td className="p-2 border">{entry.personaDe}</td>
                 <td className="p-2 border">{entry.personaPara}</td>
                 <td className="p-2 border">
