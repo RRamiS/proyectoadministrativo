@@ -48,10 +48,14 @@ const FolderTable = () => {
       entries: prevFolder.entries.filter(entry => entry._id !== entryId),
     }));
   };
-
-  // Calcular el monto total
-  const totalAmount = folder ? folder.entries.reduce((total, entry) => total + parseFloat(entry.monto || 0), 0) : 0;
   const totalCant = folder ? folder.entries.reduce((total, entry) => total + parseFloat(entry.cantidad || 0), 0) : 0;
+  // Calcular el monto total multiplicando el monto por la cantidad de cada fila
+  const totalAmount = folder ? folder.entries.reduce((total, entry) => {
+    const monto = parseFloat(entry.monto || 0);
+    const cantidad = parseFloat(entry.cantidad || 0);
+    return total + (monto * cantidad);
+  }, 0) : 0;
+
   if (!folder) {
     return <div>Cargando...</div>;
   }
@@ -62,7 +66,7 @@ const FolderTable = () => {
       
       {/* Monto Total */}
       <h3 className="text-lg font-semibold">Monto Total: ${totalAmount.toFixed(2)}</h3>
-      <h3 className="text-lg font-semibold">Cantidad Total: ${totalCant.toFixed(2)}</h3>
+      <h3 className="text-lg font-semibold">Cantidad Total: {totalCant.toFixed(2)}</h3>
       {/* Botón para volver atrás */}
       <button
         onClick={() => navigate(-1)} // Volver a la página anterior
@@ -103,7 +107,7 @@ const FolderTable = () => {
                 <td className="p-2 border">{entry.producto}</td>
                 <td className="p-2 border">{new Date(entry.fecha).toLocaleDateString() || 'Sin Fecha'}</td>
                 <td className="p-2 border">${entry.monto ? parseFloat(entry.monto).toFixed(2) : '0.00'}</td>
-                <td className="p-2 border">${entry.cantidad ? parseFloat(entry.cantidad).toFixed(2) : '0.00'}</td>
+                <td className="p-2 border">{entry.cantidad ? parseFloat(entry.cantidad).toFixed(2) : '0.00'}</td>
                 <td className="p-2 border">{entry.personaDe}</td>
                 <td className="p-2 border">{entry.personaPara}</td>
                 <td className="p-2 border">
