@@ -12,7 +12,7 @@ root.render(
   domain="dev-vzdnsztoc6gy1f35.us.auth0.com"
   clientId="YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V"
   authorizationParams={{
-    redirect_uri: window.location.origin + '/callback',
+    redirect_uri: "https://proyectoadministrativo.vercel.app/callback",
     audience: "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/",
   }}
 >
