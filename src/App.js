@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import LoginLogoutButton from './LoginLogoutButton';
 import AdminDashboard from './Administracion/componentes/AdminDashboard';
 import FolderTable from './Administracion/componentes/FolderTable';
 
@@ -23,12 +24,13 @@ const App = () => {
   }, [handleRedirectCallback]);
 
   if (isLoading) {
-    return <div>Cargando...</div>; // Muestra un estado de carga mientras Auth0 verifica el estado
+    return <div>Cargando...</div>;
   }
 
   return (
     <Router>
       <div>
+        <LoginLogoutButton />
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/folders" element={<FolderTable />} />
