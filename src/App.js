@@ -1,15 +1,24 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Auth0Provider } from '@auth0/auth0-react'; 
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'; // Importa useAuth0
+
 import AdminDashboard from '../src/Administracion/componentes/AdminDashboard';
 import FolderTable from '../src/Administracion/componentes/FolderTable';
-import ProtectedRoute from './Administracion/componentes/ProtectedRoute';
+
 // Reemplaza con tus valores de Auth0
-const AUTH0_DOMAIN = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/.well-known/jwks.json";
+const AUTH0_DOMAIN = "dev-vzdnsztoc6gy1f35.us.auth0.com";
 const AUTH0_CLIENT_ID = "YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V";
 const AUTH0_AUDIENCE = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/";
+
+// Componente Callback para manejar la autenticación
 const Callback = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, loginWithRedirect } = useAuth0();
+
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      loginWithRedirect();
+    }
+  }, [isAuthenticated, loginWithRedirect]);
 
   return isAuthenticated ? (
     <div>Redirigiendo...</div>
@@ -17,6 +26,7 @@ const Callback = () => {
     <div>Error al autenticar</div>
   );
 };
+
 function App() {
   return (
     <Auth0Provider
@@ -32,7 +42,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
           <Route path="/carpetas/:id" element={<FolderTable />} />
-          <Route path="/callback" element={<Callback />} /> 
+          <Route path="/callback" element={<Callback />} />
         </Routes>
       </Router>
     </Auth0Provider>
