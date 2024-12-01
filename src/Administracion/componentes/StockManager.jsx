@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
+import { useAuth0 } from "@auth0/auth0-react"; // Importar useAuth0
 
 const StockManager = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Usar el hook para obtener el token
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
@@ -12,70 +14,89 @@ const StockManager = () => {
 
   useEffect(() => {
     const fetchStock = async () => {
-      const token = await getAccessTokenSilently(); // Obtener el token desde Auth0
-      const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`, // Incluir el token en el encabezado
-        },
-      });
-      const data = await response.json();
-      console.log(data);
+      try {
+        const token = await getAccessTokenSilently(); // Obtener el token
+        const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Usar el token en el encabezado
+          },
+        });
+        const data = await response.json();
+        setStock(data);
+      } catch (error) {
+        console.error("Error al obtener los datos del stock:", error);
+      }
     };
 
     fetchStock();
-  }, []);
+  }, [getAccessTokenSilently]); // Incluir la dependencia
 
   const addStock = async () => {
-    const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(newStock),
-    });
+    try {
+      const token = await getAccessTokenSilently(); // Obtener el token
+      const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newStock),
+      });
 
-    if (response.ok) {
-      const addedStock = await response.json();
-      setStock([...stock, addedStock]);
-      setNewStock({ producto: "", cantidad: "", fechaIngreso: "" });
-    } else {
-      console.error("Error al agregar el stock");
+      if (response.ok) {
+        const addedStock = await response.json();
+        setStock([...stock, addedStock]);
+        setNewStock({ producto: "", cantidad: "", fechaIngreso: "" });
+      } else {
+        console.error("Error al agregar el stock");
+      }
+    } catch (error) {
+      console.error("Error al agregar el stock:", error);
     }
   };
 
   const updateStock = async () => {
-    const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${editStock._id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(editStock),
-    });
+    try {
+      const token = await getAccessTokenSilently(); // Obtener el token
+      const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${editStock._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(editStock),
+      });
 
-    if (response.ok) {
-      const updatedStock = await response.json();
-      setStock(stock.map((item) => (item._id === updatedStock._id ? updatedStock : item)));
-      setEditStock(null);
-    } else {
-      console.error("Error al editar el stock");
+      if (response.ok) {
+        const updatedStock = await response.json();
+        setStock(stock.map((item) => (item._id === updatedStock._id ? updatedStock : item)));
+        setEditStock(null);
+      } else {
+        console.error("Error al editar el stock");
+      }
+    } catch (error) {
+      console.error("Error al editar el stock:", error);
     }
   };
 
   const deleteStock = async (id) => {
-    const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    try {
+      const token = await getAccessTokenSilently(); // Obtener el token
+      const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (response.ok) {
-      setStock(stock.filter((item) => item._id !== id));
-    } else {
-      console.error("Error al eliminar el stock");
+      if (response.ok) {
+        setStock(stock.filter((item) => item._id !== id));
+      } else {
+        console.error("Error al eliminar el stock");
+      }
+    } catch (error) {
+      console.error("Error al eliminar el stock:", error);
     }
   };
 
