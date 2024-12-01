@@ -13,7 +13,7 @@ root.render(
       clientId="YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V" 
       authorizationParams={{
         redirect_uri: window.location.origin,
-        audience: "https://admapi-production.up.railway.app/", 
+        audience: "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/", 
         
       }}
       cacheLocation="localstorage"
