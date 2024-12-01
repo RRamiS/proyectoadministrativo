@@ -4,6 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react"; // Importar useAuth0
 
 const StockManager = () => {
   const { getAccessTokenSilently } = useAuth0(); // Usar el hook para obtener el token
+  console.log("Token JWT:", token);
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
@@ -38,6 +39,7 @@ const StockManager = () => {
   const addStock = async () => {
     try {
       const token = await getAccessTokenSilently(); // Obtener el token
+      console.log("Token JWT:", token);
       const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
         method: "POST",
         headers: {
