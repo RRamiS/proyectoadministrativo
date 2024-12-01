@@ -15,7 +15,7 @@ function App() {
       domain={AUTH0_DOMAIN}
       clientId={AUTH0_CLIENT_ID}
       authorizationParams={{
-        redirect_uri: "https://proyectoadministrativo.vercel.app/callback",
+        redirect_uri: "https://proyectoadministrativo.vercel.app/",
         audience: AUTH0_AUDIENCE,
         scope: "read:current_user update:current_user_metadata",
       }}
