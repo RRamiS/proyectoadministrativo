@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import apiClient from "../../axiosConfig";
 const StockManager = () => {
-  const { getAccessTokenSilently } = useAuth0();
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
@@ -15,23 +14,14 @@ const StockManager = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const token = await getAccessTokenSilently(); // Obtiene el token
-        const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`, // Token en el encabezado
-          },
-        });
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
-        const data = await response.json();
-        setStock(data);
+        const response = await apiClient.get("/stock"); // Cambia la ruta según tu backend
+        setStock(response.data);
       } catch (error) {
-        console.error("Error al obtener los datos del stock:", error.message);
+        console.error("Error al obtener el stock", error);
       }
     };
-
     fetchStock();
-  }, [getAccessTokenSilently]);
+  }, []);
 
   const addStock = async () => {
     try {
