@@ -6,7 +6,7 @@ import AdminDashboard from '../src/Administracion/componentes/AdminDashboard';
 import FolderTable from '../src/Administracion/componentes/FolderTable';
 
 // Reemplaza con tus valores de Auth0
-const AUTH0_DOMAIN = "dev-vzdnsztoc6gy1f35.us.auth0.com";
+const AUTH0_DOMAIN = "https://dev-vzdnsztoc6gy1f35.us.auth0.com";
 const AUTH0_CLIENT_ID = "YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V";
 const AUTH0_AUDIENCE = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/";
 
