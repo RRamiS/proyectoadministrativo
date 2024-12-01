@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import { useAuth0 } from "@auth0/auth0-react"; // Importar useAuth0
+import { useAuth0 } from "@auth0/auth0-react";
 
 const StockManager = () => {
-  const { getAccessTokenSilently } = useAuth0(); // Usar el hook para obtener el token
+  const { getAccessTokenSilently } = useAuth0();
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
@@ -15,30 +15,27 @@ const StockManager = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const token = await getAccessTokenSilently(); // Obtén el token
-        console.log("Token JWT:", token);
+        const token = await getAccessTokenSilently(); // Obtiene el token
         const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Envía el token en el encabezado
+            Authorization: `Bearer ${token}`, // Token en el encabezado
           },
         });
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
         const data = await response.json();
-        setStock(data); // Actualiza el estado con los datos obtenidos
+        setStock(data);
       } catch (error) {
         console.error("Error al obtener los datos del stock:", error.message);
       }
     };
-    
 
     fetchStock();
-  }, [getAccessTokenSilently]); // Incluir la dependencia
+  }, [getAccessTokenSilently]);
 
   const addStock = async () => {
     try {
-      const token = await getAccessTokenSilently(); // Obtener el token
-      console.log("Token JWT:", token);
+      const token = await getAccessTokenSilently();
       const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
         method: "POST",
         headers: {
@@ -47,7 +44,6 @@ const StockManager = () => {
         },
         body: JSON.stringify(newStock),
       });
-
       if (response.ok) {
         const addedStock = await response.json();
         setStock([...stock, addedStock]);
@@ -56,13 +52,13 @@ const StockManager = () => {
         console.error("Error al agregar el stock");
       }
     } catch (error) {
-      console.error("Error al agregar el stock:", error);
+      console.error("Error al agregar el stock:", error.message);
     }
   };
 
   const updateStock = async () => {
     try {
-      const token = await getAccessTokenSilently(); // Obtener el token
+      const token = await getAccessTokenSilently();
       const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${editStock._id}`, {
         method: "PUT",
         headers: {
@@ -71,7 +67,6 @@ const StockManager = () => {
         },
         body: JSON.stringify(editStock),
       });
-
       if (response.ok) {
         const updatedStock = await response.json();
         setStock(stock.map((item) => (item._id === updatedStock._id ? updatedStock : item)));
@@ -80,27 +75,26 @@ const StockManager = () => {
         console.error("Error al editar el stock");
       }
     } catch (error) {
-      console.error("Error al editar el stock:", error);
+      console.error("Error al editar el stock:", error.message);
     }
   };
 
   const deleteStock = async (id) => {
     try {
-      const token = await getAccessTokenSilently(); // Obtener el token
+      const token = await getAccessTokenSilently();
       const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
       if (response.ok) {
         setStock(stock.filter((item) => item._id !== id));
       } else {
         console.error("Error al eliminar el stock");
       }
     } catch (error) {
-      console.error("Error al eliminar el stock:", error);
+      console.error("Error al eliminar el stock:", error.message);
     }
   };
 
