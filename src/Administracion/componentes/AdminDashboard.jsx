@@ -6,7 +6,7 @@ import Egresos from "./Egresos";
 import Inventario from "./Inventario";
 import PagosProyectados from "./pagosProyectados";
 import FolderManager from "./FolderManager"; // Importar FolderManager
-
+import StockManager from "./StockManager";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("analytics");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Estado para controlar la visibilidad del menú lateral
@@ -20,7 +20,7 @@ const AdminDashboard = () => {
       case "egresos":
         return <Egresos />;
       case "inventario":
-        return <Inventario />;
+        return <StockManager />;
       case "pagos":
         return <PagosProyectados />;
       case "carpetas":  // Caso para FolderManager
