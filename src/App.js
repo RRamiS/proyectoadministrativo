@@ -1,34 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-import AdminDashboard from '../src/Administracion/componentes/AdminDashboard';
-import FolderTable from '../src/Administracion/componentes/FolderTable';
+import AdminDashboard from './Administracion/componentes/AdminDashboard';
+import FolderTable from './Administracion/componentes/FolderTable';
+import LoginLogoutButton from './Administracion/componentes/LoginLogoutButton';
 
-// Valores de configuración
-const AUTH0_DOMAIN = "https://dev-vzdnsztoc6gy1f35.us.auth0.com";
-const AUTH0_CLIENT_ID = "YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V";
-const AUTH0_AUDIENCE = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/";
-
-function App() {
+const App = () => {
   return (
-    <Auth0Provider
-      domain={AUTH0_DOMAIN}
-      clientId={AUTH0_CLIENT_ID}
-      authorizationParams={{
-        redirect_uri: "https://proyectoadministrativo.vercel.app/",
-        audience: AUTH0_AUDIENCE,
-        scope: "read:current_user update:current_user_metadata",
-      }}
-    >
-  {/*     <LoginLogoutButton /> */}
-      <Router>
+    <Router>
+      <div>
+        <LoginLogoutButton />
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
-          <Route path="/carpetas/:id" element={<FolderTable />} />
+          <Route path="/folders" element={<FolderTable />} />
         </Routes>
-      </Router>
-    </Auth0Provider>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
