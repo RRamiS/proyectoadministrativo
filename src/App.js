@@ -8,7 +8,15 @@ import ProtectedRoute from './Administracion/componentes/ProtectedRoute';
 const AUTH0_DOMAIN = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/.well-known/jwks.json";
 const AUTH0_CLIENT_ID = "YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V";
 const AUTH0_AUDIENCE = "https://dev-vzdnsztoc6gy1f35.us.auth0.com/api/v2/";
+const Callback = () => {
+  const { isAuthenticated } = useAuth0();
 
+  return isAuthenticated ? (
+    <div>Redirigiendo...</div>
+  ) : (
+    <div>Error al autenticar</div>
+  );
+};
 function App() {
   return (
     <Auth0Provider
@@ -23,7 +31,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<AdminDashboard />} />
-          <Route path="/carpetas/:id" element={<ProtectedRoute element={<FolderTable />} />} />
+          <Route path="/carpetas/:id" element={<FolderTable />} />
+          <Route path="/callback" element={<Callback />} /> 
         </Routes>
       </Router>
     </Auth0Provider>
