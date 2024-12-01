@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import LoginLogoutButton from './LoginLogoutButton';
+import LoginLogoutButton from './Administracion/componentes/LoginLogoutButton'
 import AdminDashboard from './Administracion/componentes/AdminDashboard';
 import FolderTable from './Administracion/componentes/FolderTable';
 
