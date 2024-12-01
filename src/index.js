@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
 <Auth0Provider
-  domain="dev-vzdnsztoc6gy1f35.us.auth0.com"
+  domain="https://dev-vzdnsztoc6gy1f35.us.auth0.com"
   clientId="YmlcuWRn6boyQZuxjGMEXxMtdEIIDh0V"
   authorizationParams={{
     redirect_uri: "https://proyectoadministrativo.vercel.app/callback",
