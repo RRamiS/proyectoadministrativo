@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useAuth0 } from "@auth0/auth0-react";
 import apiClient from "../../axiosConfig";
+
 const StockManager = () => {
+  const { getAccessTokenSilently } = useAuth0(); // Hook para obtener el token
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
@@ -11,168 +13,132 @@ const StockManager = () => {
   });
   const [editStock, setEditStock] = useState(null);
 
+  // Obtener inventario al cargar el componente
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const response = await apiClient.get("/stock"); // Cambia la ruta según tu backend
+        const token = await getAccessTokenSilently(); // Obtiene el token
+        const response = await apiClient.get("/stock", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setStock(response.data);
       } catch (error) {
         console.error("Error al obtener el stock", error);
       }
     };
     fetchStock();
-  }, []);
+  }, [getAccessTokenSilently]);
 
-  const addStock = async () => {
+  // Manejar cambios en el formulario
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewStock({ ...newStock, [name]: value });
+  };
+
+  // Agregar nuevo producto
+  const handleAddStock = async () => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newStock),
+      const response = await apiClient.post("/stock", newStock, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) {
-        const addedStock = await response.json();
-        setStock([...stock, addedStock]);
-        setNewStock({ producto: "", cantidad: "", fechaIngreso: "" });
-      } else {
-        console.error("Error al agregar el stock");
-      }
+      setStock([...stock, response.data]);
+      setNewStock({ producto: "", cantidad: "", fechaIngreso: "" });
     } catch (error) {
-      console.error("Error al agregar el stock:", error.message);
+      console.error("Error al agregar stock", error);
     }
   };
 
-  const updateStock = async () => {
+  // Editar producto
+  const handleEditStock = async (id) => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${editStock._id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(editStock),
+      const response = await apiClient.put(`/stock/${id}`, editStock, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) {
-        const updatedStock = await response.json();
-        setStock(stock.map((item) => (item._id === updatedStock._id ? updatedStock : item)));
-        setEditStock(null);
-      } else {
-        console.error("Error al editar el stock");
-      }
+      setStock(
+        stock.map((item) => (item._id === id ? response.data : item))
+      );
+      setEditStock(null);
     } catch (error) {
-      console.error("Error al editar el stock:", error.message);
+      console.error("Error al editar stock", error);
     }
   };
 
-  const deleteStock = async (id) => {
+  // Eliminar producto
+  const handleDeleteStock = async (id) => {
     try {
       const token = await getAccessTokenSilently();
-      const response = await fetch(`https://admapi-production.up.railway.app/api/stock/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await apiClient.delete(`/stock/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      if (response.ok) {
-        setStock(stock.filter((item) => item._id !== id));
-      } else {
-        console.error("Error al eliminar el stock");
-      }
+      setStock(stock.filter((item) => item._id !== id));
     } catch (error) {
-      console.error("Error al eliminar el stock:", error.message);
+      console.error("Error al eliminar stock", error);
     }
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
-      <h2 className="text-2xl font-semibold mb-4">Gestión de Stock</h2>
-
-      {/* Formulario para agregar o editar stock */}
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Gestión de Stock</h1>
       <div className="mb-4">
         <input
           type="text"
+          name="producto"
           placeholder="Producto"
-          value={editStock ? editStock.producto : newStock.producto}
-          onChange={(e) =>
-            editStock
-              ? setEditStock({ ...editStock, producto: e.target.value })
-              : setNewStock({ ...newStock, producto: e.target.value })
-          }
-          className="p-2 border border-gray-300 rounded-lg mr-2"
+          value={newStock.producto}
+          onChange={handleInputChange}
+          className="border p-2 mr-2"
         />
         <input
           type="number"
+          name="cantidad"
           placeholder="Cantidad"
-          value={editStock ? editStock.cantidad : newStock.cantidad}
-          onChange={(e) =>
-            editStock
-              ? setEditStock({ ...editStock, cantidad: e.target.value })
-              : setNewStock({ ...newStock, cantidad: e.target.value })
-          }
-          className="p-2 border border-gray-300 rounded-lg mr-2"
+          value={newStock.cantidad}
+          onChange={handleInputChange}
+          className="border p-2 mr-2"
         />
         <input
           type="date"
-          value={editStock ? editStock.fechaIngreso : newStock.fechaIngreso}
-          onChange={(e) =>
-            editStock
-              ? setEditStock({ ...editStock, fechaIngreso: e.target.value })
-              : setNewStock({ ...newStock, fechaIngreso: e.target.value })
-          }
-          className="p-2 border border-gray-300 rounded-lg mr-2"
+          name="fechaIngreso"
+          value={newStock.fechaIngreso}
+          onChange={handleInputChange}
+          className="border p-2 mr-2"
         />
-        {editStock ? (
-          <button
-            onClick={updateStock}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg"
-          >
-            Actualizar
-          </button>
-        ) : (
-          <button
-            onClick={addStock}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          >
-            Agregar
-          </button>
-        )}
+        <button
+          onClick={handleAddStock}
+          className="bg-green-500 text-white px-4 py-2 rounded-lg"
+        >
+          <FaPlus /> Agregar
+        </button>
       </div>
-
-      {/* Tabla de stock */}
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead className="bg-gray-200">
+      <table className="table-auto w-full">
+        <thead>
           <tr>
-            <th className="p-2 border">Producto</th>
-            <th className="p-2 border">Cantidad</th>
-            <th className="p-2 border">Fecha Ingreso</th>
-            <th className="p-2 border">Acciones</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Fecha de Ingreso</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {stock.map((item) => (
             <tr key={item._id}>
-              <td className="p-2 border">{item.producto}</td>
-              <td className="p-2 border">{item.cantidad}</td>
-              <td className="p-2 border">
-                {new Date(item.fechaIngreso).toLocaleDateString()}
-              </td>
-              <td className="p-2 border">
+              <td>{item.producto}</td>
+              <td>{item.cantidad}</td>
+              <td>{item.fechaIngreso}</td>
+              <td>
                 <button
                   onClick={() => setEditStock(item)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded-lg mr-2"
+                  className="bg-blue-500 text-white px-2 py-1 rounded-lg mr-2"
                 >
-                  <FaEdit />
+                  <FaEdit /> Editar
                 </button>
                 <button
-                  onClick={() => deleteStock(item._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded-lg"
+                  onClick={() => handleDeleteStock(item._id)}
+                  className="bg-red-500 text-white px-2 py-1 rounded-lg"
                 >
-                  <FaTrash />
+                  <FaTrash /> Eliminar
                 </button>
               </td>
             </tr>
