@@ -15,19 +15,22 @@ const StockManager = () => {
   useEffect(() => {
     const fetchStock = async () => {
       try {
-        const token = await getAccessTokenSilently(); // Obtener el token
+        const token = await getAccessTokenSilently(); // Obtén el token
+        console.log("Token JWT:", token);
         const response = await fetch("https://admapi-production.up.railway.app/api/stock", {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Usar el token en el encabezado
+            Authorization: `Bearer ${token}`, // Envía el token en el encabezado
           },
         });
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
         const data = await response.json();
-        setStock(data);
+        setStock(data); // Actualiza el estado con los datos obtenidos
       } catch (error) {
-        console.error("Error al obtener los datos del stock:", error);
+        console.error("Error al obtener los datos del stock:", error.message);
       }
     };
+    
 
     fetchStock();
   }, [getAccessTokenSilently]); // Incluir la dependencia
