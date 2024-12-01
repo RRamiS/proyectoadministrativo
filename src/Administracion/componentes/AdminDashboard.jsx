@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { FaChartBar, FaMoneyBillWave, FaReceipt, FaBoxes, FaClock, FaFolder, FaBars } from "react-icons/fa";
+import { useAuth0 } from "@auth0/auth0-react"; // Importar Auth0
 import Analytics from "./Analytics";
 import IngresoData from "./IngresoData";
 import Egresos from "./Egresos";
 import Inventario from "./Inventario";
 import PagosProyectados from "./pagosProyectados";
-import FolderManager from "./FolderManager"; // Importar FolderManager
+import FolderManager from "./FolderManager";
 import StockManager from "./StockManager";
+
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("analytics");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Estado para controlar la visibilidad del menú lateral
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0(); // Hooks de Auth0
 
   const renderActiveTab = () => {
     switch (activeTab) {
@@ -23,7 +27,7 @@ const AdminDashboard = () => {
         return <StockManager />;
       case "pagos":
         return <PagosProyectados />;
-      case "carpetas":  // Caso para FolderManager
+      case "carpetas":
         return <FolderManager />;
       default:
         return null;
@@ -33,9 +37,10 @@ const AdminDashboard = () => {
   return (
     <div className="flex min-h-screen">
       {/* Botón para abrir/cerrar el menú en pantallas pequeñas */}
-      <button 
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
-        className="md:hidden p-4 text-white bg-gray-800 rounded-lg">
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="md:hidden p-4 text-white bg-gray-800 rounded-lg"
+      >
         <FaBars />
       </button>
 
@@ -43,6 +48,27 @@ const AdminDashboard = () => {
       {isSidebarOpen && (
         <div className="w-64 bg-gray-800 text-white flex flex-col p-4 space-y-4 md:block">
           <h1 className="text-2xl font-bold mb-8">Panel de Admin</h1>
+          {isAuthenticated ? (
+            <>
+              <div className="mb-4">
+                <p className="text-sm">Bienvenido,</p>
+                <p className="text-lg font-bold">{user?.name || "Usuario"}</p>
+              </div>
+              <button
+                onClick={() => logout({ returnTo: window.location.origin })}
+                className="p-2 bg-red-500 text-white rounded-lg"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={loginWithRedirect}
+              className="p-2 bg-blue-500 text-white rounded-lg"
+            >
+              Login
+            </button>
+          )}
           <button
             className={`p-4 rounded-lg flex items-center justify-start space-x-2 transform transition-all duration-500 ease-in-out ${
               activeTab === "analytics"
