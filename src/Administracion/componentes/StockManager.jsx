@@ -4,7 +4,6 @@ import { useAuth0 } from "@auth0/auth0-react"; // Importar useAuth0
 
 const StockManager = () => {
   const { getAccessTokenSilently } = useAuth0(); // Usar el hook para obtener el token
-  console.log("Token JWT:", token);
   const [stock, setStock] = useState([]);
   const [newStock, setNewStock] = useState({
     producto: "",
