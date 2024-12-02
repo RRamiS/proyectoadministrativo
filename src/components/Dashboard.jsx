@@ -1,16 +1,31 @@
 import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
+
 const Dashboard = () => {
   const location = useLocation();
 
+  // Detectar si estamos en la ruta de Analytics
+  const isAnalytics = location.pathname === "/dashboard/analytics";
+
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="w-1/4 bg-gray-800 text-white p-6 flex flex-col justify-between">
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
-          <nav className="flex flex-col space-y-4">
+    
+    <div className={`flex ${isAnalytics ? "flex-col" : "flex-row"} h-screen`}>
+      {/* Sidebar o Barra Superior */}
+      <div
+        className={`${
+          isAnalytics
+            ? "w-full h-auto flex-row justify-center items-center space-x-6 py-4"
+            : "w-1/5 h-full flex-col justify-between space-y-4 py-6"
+        } bg-gray-800 text-white flex p-4`}
+      >
+        <div className={`${isAnalytics ? "text-center" : ""}`}>
+          <h2 className="text-xl font-bold mb-4">Dashboard</h2>
+          <nav
+            className={`flex ${
+              isAnalytics ? "flex-row justify-center items-center space-x-4" : "flex-col space-y-2"
+            }`}
+          >
             <Link
               to="/dashboard/ingresos"
               className={`hover:text-gray-300 ${
@@ -66,14 +81,16 @@ const Dashboard = () => {
             localStorage.removeItem("token");
             window.location.href = "/";
           }}
-          className="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+          className={`${
+            isAnalytics ? "mt-0" : "mt-4"
+          } bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded`}
         >
           Cerrar Sesión
         </button>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6">
+      <div className={`flex-1 p-6 ${isAnalytics ? "mt-20" : ""}`}>
         <Outlet />
       </div>
     </div>
