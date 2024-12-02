@@ -1,41 +1,36 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
-import LoginLogoutButton from './Administracion/componentes/LoginLogoutButton'
-import AdminDashboard from './Administracion/componentes/AdminDashboard';
-import FolderTable from './Administracion/componentes/FolderTable';
-
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./components/LoginPage";
+import Dashboard from "./components/Dashboard";
+import Ingresos from "./components/Ingresos";
+import Egresos from "./components/Egresos";
+import Folders from "./components/Folders";
+import PagosProyectados from "./components/PagosProyectados";
+import Analytics from "./components/Analytics";
+import StockManager from "./components/StockManager";
 const App = () => {
-  const { handleRedirectCallback, isLoading } = useAuth0();
-
-  useEffect(() => {
-    const processLogin = async () => {
-      if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-        try {
-          await handleRedirectCallback();
-          // Limpia la URL para evitar confusiones
-          window.history.replaceState({}, document.title, window.location.pathname);
-        } catch (error) {
-          console.error('Error al procesar el login:', error);
-        }
-      }
-    };
-    processLogin();
-  }, [handleRedirectCallback]);
-
-  if (isLoading) {
-    return <div>Cargando...</div>;
-  }
+  const [user, setUser] = useState(null);
 
   return (
     <Router>
-      <div>
-        <LoginLogoutButton />
-        <Routes>
-          <Route path="/" element={<AdminDashboard />} />
-          <Route path="/folders" element={<FolderTable />} />
-        </Routes>
-      </div>
+      <Routes>
+        {/* Ruta de Login */}
+        <Route path="/" element={<LoginPage setUser={setUser} />} />
+
+        {/* Ruta del Dashboard */}
+        <Route path="/dashboard" element={<Dashboard />}>
+          <Route index element={<p className="text-lg text-gray-700">Selecciona una opción del menú para comenzar.</p>} />
+          <Route path="ingresos" element={<Ingresos />} />
+          <Route path="egresos" element={<Egresos />} />
+          <Route path="folders" element={<Folders />} />
+          <Route path="pagos-proyectados" element={<PagosProyectados />} />
+          <Route path="stock" element={<StockManager />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
+
+        {/* Redirige cualquier ruta desconocida al login */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
     </Router>
   );
 };
