@@ -19,19 +19,20 @@ const Folders = () => {
 
   const token = localStorage.getItem("token");
 
-  // Obtener carpetas
   const fetchFolders = async () => {
     try {
-      const response = await axios.get("https://admapi-production.up.railway.app/api/folders", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(
+        "https://admapi-production.up.railway.app/api/folders",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       setFolders(response.data);
     } catch (err) {
       setError("Error al cargar las carpetas.");
     }
   };
 
-  // Alternar la expansión de una carpeta
   const toggleFolder = (folderId) => {
     setExpandedFolders((prevState) => ({
       ...prevState,
@@ -39,7 +40,6 @@ const Folders = () => {
     }));
   };
 
-  // Crear o editar carpeta
   const handleSaveFolder = async () => {
     try {
       if (editFolder) {
@@ -68,11 +68,9 @@ const Folders = () => {
     }
   };
 
-  // Agregar o editar entrada
   const handleSaveEntry = async (folderId) => {
     try {
       if (editEntry) {
-        // Editar entrada existente
         const response = await axios.put(
           `https://admapi-production.up.railway.app/api/folders/${folderId}/entries/${editEntry._id}`,
           entry,
@@ -85,7 +83,6 @@ const Folders = () => {
         );
         setEditEntry(null);
       } else {
-        // Agregar nueva entrada
         const response = await axios.post(
           `https://admapi-production.up.railway.app/api/folders/${folderId}/entries`,
           entry,
@@ -97,7 +94,6 @@ const Folders = () => {
           )
         );
       }
-      // Reiniciar formulario
       setEntry({
         producto: "",
         fecha: "",
@@ -111,7 +107,6 @@ const Folders = () => {
     }
   };
 
-  // Eliminar entrada
   const handleDeleteEntry = async (folderId, entryId) => {
     try {
       const response = await axios.delete(
@@ -156,128 +151,84 @@ const Folders = () => {
 
       {/* Lista de Carpetas */}
       <div className="mt-4">
-        {folders.map((folder) => (
-          <div key={folder._id} className="border p-4 rounded mb-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-bold">{folder.name}</h2>
-              <div>
-                <button
-                  onClick={() => toggleFolder(folder._id)}
-                  className="bg-gray-500 text-white px-2 py-1 rounded mr-2"
-                >
-                  {expandedFolders[folder._id] ? "Contraer" : "Expandir"}
-                </button>
-                <button
-                  onClick={() => {
-                    setEditFolder(folder);
-                    setFolderName(folder.name);
-                  }}
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
-                >
-                  Editar
-                </button>
-              </div>
-            </div>
+        {folders.map((folder) => {
+          const totalQuantity = folder.entries.reduce(
+            (sum, entry) => sum + entry.cantidad,
+            0
+          );
+          const totalAmount = folder.entries.reduce(
+            (sum, entry) => sum + entry.cantidad * entry.monto,
+            0
+          );
 
-            {/* Contenido de la Carpeta */}
-            {expandedFolders[folder._id] && (
-              <>
-                {/* Entradas */}
-                {folder.entries.map((entry) => (
-                  <div key={entry._id} className="border p-2 rounded mb-2">
-                    <p>Producto: {entry.producto}</p>
-                    <p>Fecha: {entry.fecha}</p>
-                    <p>Monto: {entry.monto}</p>
-                    <p>Cantidad: {entry.cantidad}</p>
-                    <p>De: {entry.personaDe}</p>
-                    <p>Para: {entry.personaPara}</p>
-                    <button
-                      onClick={() => {
-                        setEditEntry(entry);
-                        setEntry(entry);
-                      }}
-                      className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => handleDeleteEntry(folder._id, entry._id)}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
-                ))}
-
-                {/* Formulario para agregar o editar entradas */}
-                <div className="mt-4">
-                  <h3 className="font-bold">
-                    {editEntry && editEntry._id ? "Editar Entrada" : "Nueva Entrada"}
-                  </h3>
-                  <input
-                    type="text"
-                    value={entry.producto}
-                    onChange={(e) =>
-                      setEntry({ ...entry, producto: e.target.value })
-                    }
-                    placeholder="Producto"
-                    className="border p-2 rounded mr-2"
-                  />
-                  <input
-                    type="date"
-                    value={entry.fecha}
-                    onChange={(e) =>
-                      setEntry({ ...entry, fecha: e.target.value })
-                    }
-                    className="border p-2 rounded mr-2"
-                  />
-                  <input
-                    type="number"
-                    value={entry.monto}
-                    onChange={(e) =>
-                      setEntry({ ...entry, monto: parseFloat(e.target.value) })
-                    }
-                    placeholder="Monto"
-                    className="border p-2 rounded mr-2"
-                  />
-                  <input
-                    type="number"
-                    value={entry.cantidad}
-                    onChange={(e) =>
-                      setEntry({ ...entry, cantidad: parseInt(e.target.value) })
-                    }
-                    placeholder="Cantidad"
-                    className="border p-2 rounded mr-2"
-                  />
-                  <input
-                    type="text"
-                    value={entry.personaDe}
-                    onChange={(e) =>
-                      setEntry({ ...entry, personaDe: e.target.value })
-                    }
-                    placeholder="De"
-                    className="border p-2 rounded mr-2"
-                  />
-                  <input
-                    type="text"
-                    value={entry.personaPara}
-                    onChange={(e) =>
-                      setEntry({ ...entry, personaPara: e.target.value })
-                    }
-                    placeholder="Para"
-                    className="border p-2 rounded mr-2"
-                  />
+          return (
+            <div key={folder._id} className="border p-4 rounded mb-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-lg font-bold">{folder.name}</h2>
+                <div>
                   <button
-                    onClick={() => handleSaveEntry(folder._id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded"
+                    onClick={() => toggleFolder(folder._id)}
+                    className="bg-gray-500 text-white px-2 py-1 rounded mr-2"
                   >
-                    {editEntry ? "Guardar Cambios" : "Agregar Entrada"}
+                    {expandedFolders[folder._id] ? "Contraer" : "Expandir"}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditFolder(folder);
+                      setFolderName(folder.name);
+                    }}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  >
+                    Editar
                   </button>
                 </div>
-              </>
-            )}
-          </div>
-        ))}
+              </div>
+
+              {expandedFolders[folder._id] && (
+                <>
+                  {folder.entries.map((entry) => (
+                    <div key={entry._id} className="border p-2 rounded mb-2">
+                      <p>Producto: {entry.producto}</p>
+                      <p>Fecha: {entry.fecha}</p>
+                      <p>Monto: {entry.monto}</p>
+                      <p>Cantidad: {entry.cantidad}</p>
+                      <button
+                        onClick={() => {
+                          setEditEntry(entry);
+                          setEntry(entry);
+                        }}
+                        className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDeleteEntry(folder._id, entry._id)
+                        }
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  ))}
+
+                  <div className="mt-4 p-4 bg-gray-100 rounded">
+                    <p className="text-lg font-bold">
+                      Cantidad Total:{" "}
+                      <span className="text-green-500">{totalQuantity}</span>
+                    </p>
+                    <p className="text-lg font-bold">
+                      Monto Total:{" "}
+                      <span className="text-blue-500">
+                        ${totalAmount.toFixed(2)}
+                      </span>
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
