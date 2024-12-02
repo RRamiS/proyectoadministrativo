@@ -13,7 +13,7 @@ const Ingresos = () => {
   // Obtener los ingresos del backend
   const fetchIngresos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/ingresos", {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/ingresos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIngresos(response.data);
@@ -26,7 +26,7 @@ const Ingresos = () => {
   const handleAddIngreso = async () => {
     try {
       const newIngreso = { descripcion, monto: parseFloat(monto) };
-      const response = await axios.post("http://localhost:5000/api/ingresos", newIngreso, {
+      const response = await axios.post("https://admapi-production.up.railway.app/api/ingresos", newIngreso, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIngresos([...ingresos, response.data]);
@@ -43,7 +43,7 @@ const Ingresos = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/ingresos/${editIngreso._id}`,
+        `https://admapi-production.up.railway.app/api/ingresos/${editIngreso._id}`,
         { descripcion, monto: parseFloat(monto) },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -63,7 +63,7 @@ const Ingresos = () => {
   // Eliminar un ingreso
   const handleDeleteIngreso = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/ingresos/${id}`, {
+      await axios.delete(`https://admapi-production.up.railway.app/api/ingresos/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setIngresos(ingresos.filter((ingreso) => ingreso._id !== id));

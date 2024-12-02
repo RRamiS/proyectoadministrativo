@@ -14,7 +14,7 @@ const StockManager = () => {
   // Obtener todos los productos
   const fetchProductos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/stock", {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/stock", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProductos(response.data);
@@ -42,7 +42,7 @@ const StockManager = () => {
       } else {
         // Agregar nuevo producto
         const response = await axios.post(
-          "http://localhost:5000/api/stock",
+          "https://admapi-production.up.railway.app/api/stock",
           { nombre, cantidad: parseFloat(cantidad), precio: parseFloat(precio) },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -61,7 +61,7 @@ const StockManager = () => {
   // Eliminar un producto
   const handleDeleteProducto = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/stock/${id}`, {
+      await axios.delete(`https://admapi-production.up.railway.app/api/stock/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProductos(productos.filter((producto) => producto._id !== id));

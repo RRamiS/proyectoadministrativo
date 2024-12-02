@@ -22,7 +22,7 @@ const Folders = () => {
   // Obtener carpetas
   const fetchFolders = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/folders", {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/folders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setFolders(response.data);
@@ -44,7 +44,7 @@ const Folders = () => {
     try {
       if (editFolder) {
         const response = await axios.put(
-          `http://localhost:5000/api/folders/${editFolder._id}`,
+          `https://admapi-production.up.railway.app/api/folders/${editFolder._id}`,
           { name: folderName },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -56,7 +56,7 @@ const Folders = () => {
         setEditFolder(null);
       } else {
         const response = await axios.post(
-          "http://localhost:5000/api/folders",
+          "https://admapi-production.up.railway.app/api/folders",
           { name: folderName },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -74,7 +74,7 @@ const Folders = () => {
       if (editEntry) {
         // Editar entrada existente
         const response = await axios.put(
-          `http://localhost:5000/api/folders/${folderId}/entries/${editEntry._id}`,
+          `https://admapi-production.up.railway.app/api/folders/${folderId}/entries/${editEntry._id}`,
           entry,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -87,7 +87,7 @@ const Folders = () => {
       } else {
         // Agregar nueva entrada
         const response = await axios.post(
-          `http://localhost:5000/api/folders/${folderId}/entries`,
+          `https://admapi-production.up.railway.app/api/folders/${folderId}/entries`,
           entry,
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -115,7 +115,7 @@ const Folders = () => {
   const handleDeleteEntry = async (folderId, entryId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/folders/${folderId}/entries/${entryId}`,
+        `https://admapi-production.up.railway.app/api/folders/${folderId}/entries/${entryId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setFolders(

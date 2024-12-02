@@ -11,7 +11,7 @@ const LoginPage = ({ setUser }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", { email, password });
+      const response = await axios.post("https://admapi-production.up.railway.app/api/users/login", { email, password });
       const { token } = response.data;
       localStorage.setItem("token", token); // Guardar token en localStorage
       setUser({ token }); // Actualizar estado global del usuario
@@ -23,7 +23,7 @@ const LoginPage = ({ setUser }) => {
 
   const handleRegister = async () => {
     try {
-      await axios.post("http://localhost:5000/api/users/register", { email, password });
+      await axios.post("https://admapi-production.up.railway.app/api/users/register", { email, password });
       setIsRegister(false); // Cambiar a modo login tras registro exitoso
       setError(null);
     } catch (error) {

@@ -13,7 +13,7 @@ const Egresos = () => {
   // Obtener los egresos del backend
   const fetchEgresos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/egresos", {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/egresos", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEgresos(response.data);
@@ -26,7 +26,7 @@ const Egresos = () => {
   const handleAddEgreso = async () => {
     try {
       const newEgreso = { descripcion, monto: parseFloat(monto) };
-      const response = await axios.post("http://localhost:5000/api/egresos", newEgreso, {
+      const response = await axios.post("https://admapi-production.up.railway.app/api/egresos", newEgreso, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEgresos([...egresos, response.data]);
@@ -43,7 +43,7 @@ const Egresos = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/egresos/${editEgreso._id}`,
+        `https://admapi-production.up.railway.app/api/egresos/${editEgreso._id}`,
         { descripcion, monto: parseFloat(monto) },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -63,7 +63,7 @@ const Egresos = () => {
   // Eliminar un egreso
   const handleDeleteEgreso = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/egresos/${id}`, {
+      await axios.delete(`https://admapi-production.up.railway.app/api/egresos/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEgresos(egresos.filter((egreso) => egreso._id !== id));

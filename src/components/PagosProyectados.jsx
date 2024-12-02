@@ -13,7 +13,7 @@ const PagosProyectados = () => {
   // Obtener todos los pagos proyectados
   const fetchPagos = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/Pago", {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/Pago", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPagos(response.data);
@@ -26,7 +26,7 @@ const PagosProyectados = () => {
   const handleAddPago = async () => {
     try {
       const newPago = { descripcion, monto: parseFloat(monto), fechaPago };
-      const response = await axios.post("http://localhost:5000/api/Pago", newPago, {
+      const response = await axios.post("https://admapi-production.up.railway.app/api/Pago", newPago, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPagos([...pagos, response.data]);
@@ -42,7 +42,7 @@ const PagosProyectados = () => {
   const handleUpdatePago = async (id) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/Pago/${id}`,
+        `https://admapi-production.up.railway.app/api/Pago/${id}`,
         { estado: "pagado" },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -57,7 +57,7 @@ const PagosProyectados = () => {
   // Eliminar un pago proyectado
   const handleDeletePago = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/Pago/${id}`, {
+      await axios.delete(`https://admapi-production.up.railway.app/api/Pago/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPagos(pagos.filter((pago) => pago._id !== id));
