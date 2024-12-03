@@ -36,6 +36,30 @@ const Analytics = () => {
     fetchAnalytics();
   }, []);
 
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await axios.get("https://admapi-production.up.railway.app/api/analytics", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const historicoResponse = await axios.get("https://admapi-production.up.railway.app/api/historico", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        setData({
+          ...response.data,
+          historico: historicoResponse.data,
+        });
+      } catch (error) {
+        console.error("Error al cargar datos analíticos:", error);
+      }
+    };
+  
+    fetchAnalytics();
+  }, []);
+  
+
   if (!data) {
     return <p className="text-center mt-8">Cargando datos...</p>;
   }
@@ -131,40 +155,46 @@ const Analytics = () => {
 
         {/* Histórico de Ingresos y Egresos */}
         <div className="bg-white p-4 rounded shadow w-full">
-          <h2 className="text-xl font-bold mb-2">Histórico de Ingresos y Egresos</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <Line
-                data={{
-                  labels: ["Enero", "Febrero", "Marzo", "Abril", "Mayo"],
-                  datasets: [
-                    {
-                      label: "Ingresos",
-                      data: [500, 700, 800, 600, 1000],
-                      borderColor: "#4caf50",
-                      fill: false,
-                    },
-                    {
-                      label: "Egresos",
-                      data: [400, 500, 600, 700, 900],
-                      borderColor: "#f44336",
-                      fill: false,
-                    },
-                  ],
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: "top",
-                    },
-                  },
-                }}
-              />
-            </ResponsiveContainer>
-          </div>
-        </div>
+  <h2 className="text-xl font-bold mb-2">Histórico de Ingresos y Egresos</h2>
+  <div className="h-64">
+    {data.historico && data.historico.ingresos.length > 0 && data.historico.egresos.length > 0 ? (
+      <ResponsiveContainer width="100%" height="100%">
+        <Line
+          data={{
+            labels: data.historico.ingresos.map((i) => `Mes ${i.mes}`),
+            datasets: [
+              {
+                label: "Ingresos",
+                data: data.historico.ingresos.map((i) => i.total),
+                borderColor: "#4caf50",
+                fill: false,
+              },
+              {
+                label: "Egresos",
+                data: data.historico.egresos.map((e) => e.total),
+                borderColor: "#f44336",
+                fill: false,
+              },
+            ],
+          }}
+          options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+            },
+          }}
+        />
+      </ResponsiveContainer>
+    ) : (
+      <p className="text-center">Cargando datos históricos o no disponibles...</p>
+    )}
+  </div>
+</div>
+
+
 
         {/* Distribución de Stock */}
         <div className="bg-white p-4 rounded shadow w-full">
