@@ -27,37 +27,43 @@ const Analytics = () => {
         const response = await axios.get("https://admapi-production.up.railway.app/api/analytics", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setData(response.data);
-      } catch (error) {
-        console.error("Error al cargar datos analíticos:", error);
-      }
-    };
 
-    fetchAnalytics();
-  }, []);
-
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await axios.get("https://admapi-production.up.railway.app/api/analytics", {
+        const historicoResponse = await axios.get("https://admapi-production.up.railway.app/api/analytics/historico", {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
-        const historicoResponse = await axios.get("https://admapi-production.up.railway.app/api/historico", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-  
+    
         setData({
           ...response.data,
-          historico: historicoResponse.data,
+          historico: historicoResponse.data || { ingresos: [], egresos: [] },
         });
       } catch (error) {
         console.error("Error al cargar datos analíticos:", error);
       }
     };
-  
+
     fetchAnalytics();
   }, []);
+
+  /* const fetchAnalytics = async () => {
+    try {
+      const response = await axios.get("https://admapi-production.up.railway.app/api/analytics", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      const historicoResponse = await axios.get("https://admapi-production.up.railway.app/api/analytics/historico", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // Agregar validación de la respuesta
+      setData({
+        ...response.data,
+        historico: historicoResponse.data || { ingresos: [], egresos: [] },
+      });
+    } catch (error) {
+      console.error("Error al cargar datos analíticos:", error);
+    }
+  }; */
+  
   
 
   if (!data) {
@@ -157,7 +163,7 @@ const Analytics = () => {
         <div className="bg-white p-4 rounded shadow w-full">
   <h2 className="text-xl font-bold mb-2">Histórico de Ingresos y Egresos</h2>
   <div className="h-64">
-    {data.historico && data.historico.ingresos.length > 0 && data.historico.egresos.length > 0 ? (
+    {data.historico && Array.isArray(data.historico.ingresos) && Array.isArray(data.historico.egresos) ? (
       <ResponsiveContainer width="100%" height="100%">
         <Line
           data={{
@@ -193,6 +199,7 @@ const Analytics = () => {
     )}
   </div>
 </div>
+
 
 
 
